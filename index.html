@@ -1,70 +1,121 @@
 <!doctype html>
 <html>
-    <head>
-        <title>KCalc</title>
-
-    </head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<head>
+		<title>KCalc</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" type="image/png" href="favicon.png">
+	</head>
 	<style>
+		@font-face {
+		  font-family: "bit";
+		  src: url("Titillium-Bold.otf");
+		}
 		body {
-			font-family:Arial, Helvetica, sans-serif;
-			font-weight:bold;
+			font-family: bit, Arial, Helvetica, sans-serif;
 			color:DimGray;
+			font-size:18px;
 			text-align:center;
+			padding:7px 7px 7px 7px;
+			margin:0px;
 		}
 		button {
-			position:relative; 
-			border:0px solid #adc5cf;
-			background: #e4f1f9;
-			color:#7da2aa;
-			height:35px;
-			width:75px;
-			outline:none;
+			font-family: bit, Arial, Helvetica, sans-serif;
+			border:0px solid DimGray;
+			background:white;
+			color:DimGray;
+			height:50px;
+			width:100%;
 			padding:0px;
+			outline:none;
+			font-size:18px;
 		}
-
 		button:hover {
-			color:white;
-			background-color:#cdd8e0;
+			color:black;
 		}
-
+		.down:hover {
+			color:white;
+		}
 		.down {
-			background: #c0d6e9;
+			background: DimGray;
+			color: white;
+		}
+		table {
+			width:100%;
+			margin:0px;
+			border-spacing: 0px;
+		}
+		td {
+			padding-bottom:5px;
+		}
+		input {
+			font-family: bit, Arial, Helvetica, sans-serif;
+			font-size:18px;
+			color:DimGray;
+			padding:3px;
+		}
+		a {
+			color:DimGray;
+		}
+		a:hover {
+			color:black;
 		}
 	</style>
-    <body style="background-image:url('stardust.png');">
-		<div style="display:inline-block; background:white; margin-left:auto; margin-right:auto; margin-top:25px; padding:25px;">
-			<table style="width:100%;" cellpadding="7">
+	<body style="background-image:url('stardust.png');">
+		<div style="display:inline-block; background:white; padding:25px; width:295px;">
+			<table>
 				<tr>
-					<td style="text-align:left;"><button id='male'>Male</button></td>
-					<td style="text-align:right;"><button id='female'>Female</button></td>
+					<td style="text-align:left;">Weight [lb]:</td>
+					<td style="text-align:right;"><input id="weight" type="number" min="0" max="1000" value="180" style="width:50px"></td>
 				</tr>
 				<tr>
-					<td style="text-align:left;">Age:</td>
-					<td style="text-align:right;"><input id='age' type="number" min="0" max="100" value="35" style="width:50px"> yr</td>
-				</tr>
-				<tr>
-					<td style="text-align:left;">Height:</td>
-					<td style="text-align:right;"><input id='height' type="number" min="0" max="96" value="65" style="width:50px"> in</td>
-				</tr>
-				<tr>
-					<td style="text-align:left;">Weight:</td>
-					<td style="text-align:right;"><input id='weight' type="number" min="0" max="500" value="180" style="width:50px"> lb</td>
-				</tr>
-				<tr>
-					<td style="text-align:left;">Body Fat:</td>
-					<td style="text-align:right;"><input id='bf' type="number" min="0" max="35" value="20" style="width:50px"> %</td>
-				</tr>
-				<tr>
-					<td style="text-align:left;">Activity Level:</td>
-					<td style="text-align:right;"><input id='act' type="number" min="1" max="5" value="3" style="width:50px"> <img id="help" src="help.png" /></td>
+				<td style="text-align:left;">Body Fat Percent <img id="helpFat" src="help.png" />:</td>
+					<td style="text-align:right;"><input id="bf" type="number" min="0" max="100" value="20" style="width:50px"></td>
 				</tr>
 			</table>
-				<button id='lose'>Lose</button>
-				<button id='maintain'>Maintain</button>
-				<button id='gain'>Gain</button>
-			<br /><br />
-			<table style="width:100%;" cellpadding="7">
+			<div id="helpFatContainer" style="display:none; width:100%;">
+				<img id="bf" src="bf.jpg" width="100%" />
+			</div>
+			<div style="text-align:left; float:left;">Activity Level <img id="helpAct" src="help.png" />:</div>
+			<div id="helpActContainer" style="display:none; text-align:left; font-size:14px; width:100%; float:left; padding-left:10px;">
+				1 &bull; Sedentary<br />
+				2 &bull; Lightly Active<br />
+				3 &bull; Moderately Active<br />
+				4 &bull; Highly Active<br />
+				5 &bull; Always Active<br />
+			</div>
+			<table style="padding-top:10px;">
+				<tr>
+					<td style="width:20%;"><button id="1" class="act">1</button></td>
+					<td style="width:20%;"><button id="2" class="act">2</button></td>
+					<td style="width:20%;"><button id="3" class="act">3</button></td>
+					<td style="width:20%;"><button id="4" class="act">4</button></td>
+					<td style="width:20%;"><button id="5" class="act">5</button></td>
+				</tr>
+			</table>
+			<div style="text-align:left; padding-top:10px;">Goal:</div>
+			<table style="padding-top:10px;">
+				<tr>
+					<td style="width:33%;"><button id="cut" class="goal">Cut</button></td>
+					<td style="width:33%;"><button id="maintain" class="goal">Maintain</button></td>
+					<td style="width:33%;"><button id="bulk" class="goal">Bulk</button></td>
+				</tr>
+			</table>
+			<div style="text-align:left; float:left; padding-top:20px;">Results <img id="settings" src="help.png" />:</div>
+			<table id="settingsContainer" style="display:none; font-size:14px; padding-left:10px;">
+				<tr>
+					<td style="text-align:left;">Protein/lb of LBM:</td>
+					<td style="text-align:right;"><input id="prolbm" type="number" min="0" max="3" step="0.05" value="1" style="width:50px"></td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">Fat/lb of TBW [<20% BF]:</td>
+					<td style="text-align:right;"><input id="fattbw" type="number" min="0" max="1" step="0.05" value="0.4" style="width:50px"></td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">Fat/lb of LBM [>20% BF]:</td>
+					<td style="text-align:right;"><input id="fatlbm" type="number" min="0" max="1" step="0.05" value="0.4" style="width:50px"></td>
+				</tr>
+			</table>
+			<table style="width:100%; padding-top:15px;">
 				<tr>
 					<td style="text-align:left;">Calories</td>
 					<td style="text-align:right;" id="cal"></td>
@@ -82,95 +133,101 @@
 					<td style="text-align:right;" id="fat"></td>
 				</tr>
 			</table>
+			<div style="float:right;"><img id="info" src="help.png" /></div>
+			<div id="infoContainer" style="display:none; text-align:left; font-size:14px; width:275px; padding:30px 10px 0px 10px;">
+				Acronymns:<br />
+				TDEE = Total Daily Energy Expenditure<br />
+				LBM  = Lean Body Mass<br />
+				TBW  = Total Body Weight<br />
+				BF   = Body Fat Percentage
+				<br /><br />
+				Formulas Used:<br />
+				TDEE = (370 + 9.8 * LBM) * Activity Level
+				<br /><br />
+				By default, you are calculated 1g of protein per lb of LBM and .4g of fat
+				per lb of TBW if you are below 20% BF, or .4g of fat per lb of LBM if
+				you are above 20% BF. Carbs are then used to fill the rest of your TDEE.
+				<br /><br />
+				Cut and Bulk are calculated by adding or
+				subtracting 20% from your TDEE.
+				<br /><br />
+				GitHub: <a href="http://git.io/vsshm" target="_blank">http://git.io/vsshm</a>
+			</div>
 		</div>
-		<div id="helpAct" style="position:absolute; display:none; background:white; margin-left:auto; margin-right:auto; margin-top:200px; padding:25px; text-align:left;">
-			1 = Sedentary<br />
-			2 = 1-3 light exercises per week<br />
-			3 = 3-5 moderate exercises per week<br />
-			4 = 6-7 hard exercises per week<br />
-			5 = Crazy<br />
-		</div>
-		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script>
-			$('#male').addClass("down");
-			$('#maintain').addClass("down");
-			$('#male').click(function() {
-				$(this).addClass("down");
-				$('#female').removeClass("down");
-				calc();
+		
+			$("img").click(function() {
+				$('#' + $(this).attr("id") + "Container").toggle();
+				$('#' + $(this).attr("id") + "Container").css("display") == "none" ? $(this).attr("src", "help.png") : $(this).attr("src", "x.png");
 			});
-			$('#female').click(function() {
-				$(this).addClass("down");
-				$('#male').removeClass("down");
+
+			$("button").click(function() {
+				if (!$(this).hasClass("down")) {
+					$("button." + $(this).attr("class")).removeClass("down");
+					setParameter($(this).attr("class"),$(this).attr("id"));
+					$(this).addClass("down");
+					calc();
+				}
+			});
+			
+			$("input").on("keyup change", function() {
+				setParameter($(this).attr("id"),$("#" + $(this).attr("id")).val());
 				calc();
 			});
 			
-			$('#lose').click(function() {
-				$(this).addClass("down");
-				$('#maintain').removeClass("down");
-				$('#gain').removeClass("down");
-				calc();
-			});
-			
-			$('#maintain').click(function() {
-				$(this).addClass("down");
-				$('#lose').removeClass("down");
-				$('#gain').removeClass("down");
-				calc();
-			});
-			
-			$('#gain').click(function() {
-				$(this).addClass("down");
-				$('#lose').removeClass("down");
-				$('#maintain').removeClass("down");
-				calc();
-			});
-			
-			$('#help').hover(
-				function(){
-					$('#helpAct').show().css({"display":"inline-block"});
-				},
-				function(){
-					$('#helpAct').hide();
-			});
-			
-			$('input').on('keyup change', function() {
-				calc();
-			});
-			calc();
 			function calc() {
-				switch($('#act').val()) {
-					case "1":
-						var actLevel = 1.2;
-						break;
-					case "2":
-						var actLevel = 1.375;
-						break;
-					case "3":
-						var actLevel = 1.55;
-						break;
-					case "4":
-						var actLevel = 1.725;
-						break;
-					case "5":
-						var actLevel = 1.9;
-						break;
-				}
-				
-				if ($('#lose').hasClass('down')) var adjust = -1000;
-				if ($('#maintain').hasClass('down')) var adjust = 0;
-				if ($('#gain').hasClass('down')) var adjust = 500;
-				
-				if ($('#male').hasClass('down')) {
-					$('#cal').text(Math.round((66+(6.23*$('#weight').val())+(12.7*$('#height').val())-(6.8*$('#age').val()))*actLevel+adjust));
-				} else {
-					$('#cal').text(Math.round((655+(4.35*$('#weight').val())+(4.7*$('#height').val())-(4.7*$('#age').val()))*actLevel+adjust));
-				}
-				$('#protein').text(Math.round($('#weight').val() - $('#weight').val() * ($('#bf').val() * .01)));
-				$('#fat').text(Math.round($('#weight').val() * .4));
-				$('#carb').text(Math.round(($('#cal').text() - ($('#protein').text()) * 4 - ($('#fat').text() * 9)) / 4));
+				var actArray = [ 1.2, 1.2, 1.375, 1.55, 1.725, 1.9 ];
+				var actLevel = actArray[$("button.act.down").attr("id")];
+				var weight = $("#weight").val();
+				var bf = $("#bf").val();
+				var prolbm = $("#prolbm").val();
+				var fattbw = $("#fattbw").val();
+				var fatlbm = $("#fatlbm").val();
+				var lbm = weight-weight*(bf*.01);
+
+				cal = (370 + (9.8 * lbm))*actLevel;
+				if ($("#cut").hasClass("down")) cal -= cal*.2;
+				if ($("#bulk").hasClass("down")) cal += cal*.2;
+
+				var protein = lbm*prolbm;
+				var fat = bf > 20 ? lbm * fatlbm : weight * fattbw;
+				var carb = protein*4+fat*9 < cal ? (cal - (protein * 4) - (fat * 9)) / 4 : 0;
+
+				$("#cal").text(Math.round(protein*4+fat*9+carb*4));
+				$("#protein").text(Math.round(protein));
+				$("#fat").text(Math.round(fat));
+				$("#carb").text(Math.round(carb));
 			};
+
+			if (getParameter("weight")) $("#weight").val(getParameter("weight"));
+			if (getParameter("bf")) $("#bf").val(getParameter("bf"));
+			if (getParameter("act")) $("#" + getParameter("act")).addClass("down");
+			if (getParameter("goal")) $("#" + getParameter("goal")).addClass("down");
+			if (getParameter("prolbm")) $("#prolbm").val(getParameter("prolbm"));
+			if (getParameter("fattbw")) $("#fattbw").val(getParameter("fattbw"));
+			if (getParameter("fatlbm")) $("#fatlbm").val(getParameter("fatlbm"));
+			if (!$("button.goal").hasClass("down")) $("#maintain").addClass("down");
+			if (!$("button.act").hasClass("down")) $("#2").addClass("down");
+
+			function getParameter(name) {
+				name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+				var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+					results = regex.exec(location.search);
+				return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+			}
 			
+			function setParameter(name, value)
+			{
+				var url = window.location.href;
+				if (url.indexOf(name + "=") >= 0) {
+					url = url.replace(new RegExp(name  + "[^&]*"), name + "=" + value);
+				} else
+					if (url.indexOf("?") < 0) url += "?" + name + "=" + value;
+					else url += "&" + name + "=" + value;
+				window.history.pushState("KCalc", "KCalc", url);
+			}
+			calc();
 		</script>
-    </body>
+	</body>
 </html>
