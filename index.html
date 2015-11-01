@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+    <head>
+        <title>KCalc</title>
+
+    </head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<style>
+		body {
+			font-family:Arial, Helvetica, sans-serif;
+			font-weight:bold;
+			color:DimGray;
+			text-align:center;
+		}
+		button {
+			position:relative; 
+			border:0px solid #adc5cf;
+			background: #e4f1f9;
+			color:#7da2aa;
+			height:35px;
+			width:75px;
+			outline:none;
+			padding:0px;
+		}
+
+		button:hover {
+			color:white;
+			background-color:#cdd8e0;
+		}
+
+		.down {
+			background: #c0d6e9;
+		}
+	</style>
+    <body style="background-image:url('stardust.png');">
+		<div style="display:inline-block; background:white; margin-left:auto; margin-right:auto; margin-top:25px; padding:25px;">
+			<table style="width:100%;" cellpadding="7">
+				<tr>
+					<td style="text-align:left;"><button id='male'>Male</button></td>
+					<td style="text-align:right;"><button id='female'>Female</button></td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">Age:</td>
+					<td style="text-align:right;"><input id='age' type="number" min="0" max="100" value="35" style="width:50px"> yr</td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">Height:</td>
+					<td style="text-align:right;"><input id='height' type="number" min="0" max="96" value="65" style="width:50px"> in</td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">Weight:</td>
+					<td style="text-align:right;"><input id='weight' type="number" min="0" max="500" value="180" style="width:50px"> lb</td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">Body Fat:</td>
+					<td style="text-align:right;"><input id='bf' type="number" min="0" max="35" value="20" style="width:50px"> %</td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">Activity Level:</td>
+					<td style="text-align:right;"><input id='act' type="number" min="1" max="5" value="3" style="width:50px"> <img id="help" src="help.png" /></td>
+				</tr>
+			</table>
+				<button id='lose'>Lose</button>
+				<button id='maintain'>Maintain</button>
+				<button id='gain'>Gain</button>
+			<br /><br />
+			<table style="width:100%;" cellpadding="7">
+				<tr>
+					<td style="text-align:left;">Calories</td>
+					<td style="text-align:right;" id="cal"></td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">Carb</td>
+					<td style="text-align:right;" id="carb"></td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">Protein</td>
+					<td style="text-align:right;" id="protein"></td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">Fat</td>
+					<td style="text-align:right;" id="fat"></td>
+				</tr>
+			</table>
+		</div>
+		<div id="helpAct" style="position:absolute; display:none; background:white; margin-left:auto; margin-right:auto; margin-top:200px; padding:25px; text-align:left;">
+			1 = Sedentary<br />
+			2 = 1-3 light exercises per week<br />
+			3 = 3-5 moderate exercises per week<br />
+			4 = 6-7 hard exercises per week<br />
+			5 = Crazy<br />
+		</div>
+		
+		<script>
+			$('#male').addClass("down");
+			$('#maintain').addClass("down");
+			$('#male').click(function() {
+				$(this).addClass("down");
+				$('#female').removeClass("down");
+				calc();
+			});
+			$('#female').click(function() {
+				$(this).addClass("down");
+				$('#male').removeClass("down");
+				calc();
+			});
+			
+			$('#lose').click(function() {
+				$(this).addClass("down");
+				$('#maintain').removeClass("down");
+				$('#gain').removeClass("down");
+				calc();
+			});
+			
+			$('#maintain').click(function() {
+				$(this).addClass("down");
+				$('#lose').removeClass("down");
+				$('#gain').removeClass("down");
+				calc();
+			});
+			
+			$('#gain').click(function() {
+				$(this).addClass("down");
+				$('#lose').removeClass("down");
+				$('#maintain').removeClass("down");
+				calc();
+			});
+			
+			$('#help').hover(
+				function(){
+					$('#helpAct').show().css({"display":"inline-block"});
+				},
+				function(){
+					$('#helpAct').hide();
+			});
+			
+			$('input').on('keyup change', function() {
+				calc();
+			});
+			calc();
+			function calc() {
+				switch($('#act').val()) {
+					case "1":
+						var actLevel = 1.2;
+						break;
+					case "2":
+						var actLevel = 1.375;
+						break;
+					case "3":
+						var actLevel = 1.55;
+						break;
+					case "4":
+						var actLevel = 1.725;
+						break;
+					case "5":
+						var actLevel = 1.9;
+						break;
+				}
+				
+				if ($('#lose').hasClass('down')) var adjust = -1000;
+				if ($('#maintain').hasClass('down')) var adjust = 0;
+				if ($('#gain').hasClass('down')) var adjust = 500;
+				
+				if ($('#male').hasClass('down')) {
+					$('#cal').text(Math.round((66+(6.23*$('#weight').val())+(12.7*$('#height').val())-(6.8*$('#age').val()))*actLevel+adjust));
+				} else {
+					$('#cal').text(Math.round((655+(4.35*$('#weight').val())+(4.7*$('#height').val())-(4.7*$('#age').val()))*actLevel+adjust));
+				}
+				$('#protein').text(Math.round($('#weight').val() - $('#weight').val() * ($('#bf').val() * .01)));
+				$('#fat').text(Math.round($('#weight').val() * .4));
+				$('#carb').text(Math.round(($('#cal').text() - ($('#protein').text()) * 4 - ($('#fat').text() * 9)) / 4));
+			};
+			
+		</script>
+    </body>
+</html>
