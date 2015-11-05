@@ -68,14 +68,14 @@
 					<td style="text-align:right;"><input id="weight" type="number" min="0" max="1000" value="180" style="width:50px"></td>
 				</tr>
 				<tr>
-				<td style="text-align:left;">Body Fat Percent <img id="helpFat" src="help.png" />:</td>
+				<td style="text-align:left;">Body Fat Percent <img id="helpFat" class="info" src="help.png" />:</td>
 					<td style="text-align:right;"><input id="bf" type="number" min="0" max="100" value="20" style="width:50px"></td>
 				</tr>
 			</table>
 			<div id="helpFatContainer" style="display:none; width:100%;">
 				<img id="bf" src="bf.jpg" width="100%" />
 			</div>
-			<div style="text-align:left; float:left;">Activity Level <img id="helpAct" src="help.png" />:</div>
+			<div style="text-align:left; float:left;">Activity Level <img id="helpAct" class="info" src="help.png" />:</div>
 			<div id="helpActContainer" style="display:none; text-align:left; font-size:14px; width:100%; float:left; padding-left:10px;">
 				1 &bull; Sedentary<br />
 				2 &bull; Lightly Active<br />
@@ -100,7 +100,7 @@
 					<td style="width:33%;"><button id="bulk" class="goal">Bulk</button></td>
 				</tr>
 			</table>
-			<div style="text-align:left; float:left; padding-top:20px;">Results <img id="settings" src="help.png" />:</div>
+			<div style="text-align:left; float:left; padding-top:20px;">Results <img id="settings" class="info" src="help.png" />:</div>
 			<table id="settingsContainer" style="display:none; font-size:14px; padding-left:10px;">
 				<tr>
 					<td style="text-align:left;">Protein/lb of LBM:</td>
@@ -133,7 +133,7 @@
 					<td style="text-align:right;" id="fat"></td>
 				</tr>
 			</table>
-			<div style="float:right;"><img id="info" src="help.png" /></div>
+			<div style="float:right;"><img id="info" class="info" src="help.png" /></div>
 			<div id="infoContainer" style="display:none; text-align:left; font-size:14px; width:275px; padding:30px 10px 0px 10px;">
 				Acronymns:<br />
 				TDEE = Total Daily Energy Expenditure<br />
@@ -157,7 +157,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script>
 		
-			$("img").click(function() {
+			$("img.info").click(function() {
 				$('#' + $(this).attr("id") + "Container").toggle();
 				$('#' + $(this).attr("id") + "Container").css("display") == "none" ? $(this).attr("src", "help.png") : $(this).attr("src", "x.png");
 			});
