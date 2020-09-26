@@ -71,6 +71,11 @@
 	a:hover {
 		color: black;
 	}
+
+	.male,
+	.female {
+		display: none;
+	}
 </style>
 
 <body style="background-image:url('stardust.png');">
@@ -78,19 +83,114 @@
 		<table>
 			<tr>
 				<td style="text-align:left;">Weight [lb]:</td>
-				<td style="text-align:right;"><input id="weight" type="number" min="0" max="1000" value="180" style="width:50px"></td>
+				<td style="text-align:right;">
+					<input id="weight" type="number" min="0" max="1000" value="180" style="width:60px">
+				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left;">Body Fat Percent <img id="helpFat" class="info" src="help.png" />:</td>
-				<td style="text-align:right;"><input id="bf" type="number" min="0" max="100" value="20" style="width:50px"></td>
+				<td style="text-align:right;">
+					<input id="bf" type="number" min="0" max="100" value="20" style="width:60px">
+				</td>
 			</tr>
 		</table>
 		<div id="helpFatContainer" style="display:none; width:100%;">
 			<img id="bf" src="bf.jpg" width="100%" />
+			<table>
+				<tr>
+					<td style="text-align:left;">Method:</td>
+					<td style="text-align:right;">
+						<input type="radio" id="tape" class="measure" name="measure" value="tape">
+						<label for="tape">Tape</label>
+						&nbsp;&nbsp;&nbsp;
+						<input type="radio" id="measure" class="measure" name="measure" value="caliper">
+						<label for="measure">Fold</label>
+					</td>
+				</tr>
+				<tr style="display: none;" id="sex">
+					<td style="text-align:left;">Sex:</td>
+					<td style="text-align:right;">
+						<input type="radio" id="male" class="sex" name="sex" value="male">
+						<label for="male">Male</label>
+						&nbsp;&nbsp;&nbsp;
+						<input type="radio" id="female" class="sex" name="sex" value="female">
+						<label for="female">Female</label>
+					</td>
+				</tr>
+				<tr class="male female caliper">
+					<td style="text-align:left;">Age:</td>
+					<td style="text-align:right;">
+						<input id="age" type="number" min="0" max="100" value="27" style="width:60px">
+					</td>
+				</tr>
+				<tr class="male female tape">
+					<td style="text-align:left;">Height [in]:</td>
+					<td style="text-align:right;">
+						<input id="height" type="number" min="0" max="100" value="77" style="width:60px" step="0.5">
+					</td>
+				</tr>
+				<tr class="male caliper">
+					<td style="text-align:left;">Chest:</td>
+					<td style="text-align:right;">
+						<input id="chest" type="number" min="0" max="100" value="12" style="width:60px">
+					</td>
+				</tr>
+				<tr class="male caliper">
+					<td style="text-align:left;">Abdomen:</td>
+					<td style="text-align:right;">
+						<input id="abdomen" type="number" min="0" max="100" value="20" style="width:60px">
+					</td>
+				</tr>
+				<tr class="female caliper">
+					<td style="text-align:left;">Tricep:</td>
+					<td style="text-align:right;">
+						<input id="tricep" type="number" min="0" max="100" value="12" style="width:60px">
+					</td>
+				</tr>
+				<tr class="female caliper">
+					<td style="text-align:left;">Suprailiac:</td>
+					<td style="text-align:right;">
+						<input id="suprailiac" type="number" min="0" max="100" value="20" style="width:60px">
+					</td>
+				</tr>
+				<tr class="male female caliper">
+					<td style="text-align:left;">Thigh:</td>
+					<td style="text-align:right;">
+						<input id="thigh" type="number" min="0" max="100" value="12" style="width:60px">
+					</td>
+				</tr>
+				<tr class="male female tape">
+					<td style="text-align:left;">Neck:</td>
+					<td style="text-align:right;">
+						<input id="neck" type="number" min="0" max="100" value="15" style="width:60px" step="0.5">
+					</td>
+				</tr>
+				<tr class="male female tape">
+					<td style="text-align:left;">Waist:</td>
+					<td style="text-align:right;">
+						<input id="waist" type="number" min="0" max="100" value="34" style="width:60px" step="0.5">
+					</td>
+				</tr>
+				<tr class="female tape">
+					<td style="text-align:left;">Hips:</td>
+					<td style="text-align:right;">
+						<input id="hips" type="number" min="0" max="100" value="34" style="width:60px" step="0.5">
+					</td>
+				</tr>
+			</table>
+			<table class="calcBFP" style="width:100%; padding-top:15px;">
+				<tr>
+					<td style="text-align:left;">Body Fat Percent</td>
+					<td style="text-align:right;" id="calcBFP"></td>
+				</tr>
+			</table>
+			<br>
 		</div>
 		<div style="text-align:left; float:left;">Activity Level <img id="helpAct" class="info" src="help.png" />:</div>
-		<div id="helpActContainer" style="display:none; text-align:left; font-size:14px; width:100%; float:left; padding-left:10px;">
-			1 &bull; Sedentary<br /> 2 &bull; Lightly Active<br /> 3 &bull; Moderately Active<br /> 4 &bull; Highly Active<br /> 5 &bull; Always Active<br />
+		<div id="helpActContainer"
+			style="display:none; text-align:left; font-size:14px; width:100%; float:left; padding-left:10px;">
+			1 &bull; Sedentary<br /> 2 &bull; Lightly Active<br /> 3 &bull; Moderately Active<br /> 4 &bull; Highly
+			Active<br /> 5 &bull; Always Active<br />
 		</div>
 		<table style="padding-top:10px;">
 			<tr>
@@ -109,20 +209,26 @@
 				<td style="width:33%;"><button id="bulk" class="goal">Bulk</button></td>
 			</tr>
 		</table>
-		<div style="text-align:left; float:left; padding-top:20px;">Results <img id="settings" class="info" src="help.png" />:</div>
+		<div style="text-align:left; float:left; padding-top:20px;">Results <img id="settings" class="info"
+				src="help.png" />:</div>
 		<table id="settingsContainer" style="display:none; font-size:14px; padding-left:10px;">
 			<tr>
 				<td style="text-align:left;">Protein/lb of LBM:</td>
-				<td style="text-align:right;"><input id="prolbm" type="number" min="0" max="3" step="0.05" value="1" style="width:50px"></td>
+				<td style="text-align:right;">
+					<input id="prolbm" type="number" min="0" max="3" step="0.05" value="1" style="width:60px">
+				</td>
 			</tr>
 			<tr>
-				<td style="text-align:left;">Fat/lb of TBW [
-					<20% BF]:</td>
-						<td style="text-align:right;"><input id="fattbw" type="number" min="0" max="1" step="0.05" value="0.4" style="width:50px"></td>
+				<td style="text-align:left;">Fat/lb of TBW [&lt;20% BF]:</td>
+				<td style="text-align:right;">
+					<input id="fattbw" type="number" min="0" max="1" step="0.05" value="0.4" style="width:60px">
+				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left;">Fat/lb of LBM [>20% BF]:</td>
-				<td style="text-align:right;"><input id="fatlbm" type="number" min="0" max="1" step="0.05" value="0.4" style="width:50px"></td>
+				<td style="text-align:right;">
+					<input id="fatlbm" type="number" min="0" max="1" step="0.05" value="0.4" style="width:60px">
+				</td>
 			</tr>
 		</table>
 		<table style="width:100%; padding-top:15px;">
@@ -143,24 +249,100 @@
 				<td style="text-align:right;" id="fat"></td>
 			</tr>
 		</table>
+		<br />
+		<div style="float:left;background-color:DimGrey;Color:white;padding:0px 7px 0px 7px;" id="ffmiButton">FFMI</div>
+		<table id="ffmiTable" style="display: none;">
+			<tr>
+				<td style="text-align:left;">Height [ft/in]:</td>
+				<td style="text-align:right;">
+					<input id="foot" type="number" min="4" max="7" value="6" style="width:60px">
+				</td>
+				<td style="text-align:right;">
+					<input id="inch" type="number" min="0" max="11" value="5" style="width:60px">
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:left;">FFMI:</td>
+				<td style="text-align:right;" id="ffmi"></td>
+			</tr>
+			<tr>
+				<td style="text-align:left;">Normalized FFMI:</td>
+				<td style="text-align:right;" id="nffmi"></td>
+			</tr>
+		</table>
 		<div style="float:right;"><img id="info" class="info" src="help.png" /></div>
-		<div id="infoContainer" style="display:none; text-align:left; font-size:14px; width:275px; padding:30px 10px 0px 10px;">
-			Acronymns:<br /> TDEE = Total Daily Energy Expenditure<br /> LBM = Lean Body Mass<br /> TBW = Total Body Weight<br /> BF = Body Fat Percentage
+		<div id="infoContainer"
+			style="display:none; text-align:left; font-size:14px; width:275px; padding:30px 10px 0px 10px;">
+			Acronymns:<br /> TDEE = Total Daily Energy Expenditure<br /> LBM = Lean Body Mass<br /> TBW = Total Body
+			Weight<br /> BF = Body Fat Percentage
 			<br /><br /> Formulas Used:<br /> TDEE = (370 + 9.8 * LBM) * Activity Level
-			<br /><br /> By default, you are calculated 1g of protein per lb of LBM and .4g of fat per lb of TBW if you are below 20% BF, or .4g of fat per lb of LBM if you are above 20% BF. Carbs are then used to fill the rest of your TDEE.
+			<br /><br /> By default, you are calculated 1g of protein per lb of LBM and .4g of fat per lb of TBW if you
+			are below 20% BF, or .4g of fat per lb of LBM if you are above 20% BF. Carbs are then used to fill the rest
+			of your TDEE.
 			<br /><br /> Cut and Bulk are calculated by adding or subtracting 20% from your TDEE.
-			<br /><br /> GitHub: <a href="http://git.io/vsshm" target="_blank">http://git.io/vsshm</a>
+			<br /><br /><br /> 3-Site Skinfold Equation Male
+			<br />Body Density = 1.10938 - (0.0008267 x sum of chest, abdomen and thigh skinfolds in mm ) + (0.0000016 x
+			square of the sum of chest, abdomen and thigh) - (0.0002574 x age)
+			<br /><br /> 3-Site Skinfold Equation Female
+			<br />Body Density = 1.0994921 - (0.0009929 x sum of triceps, thigh and suprailiac skinfolds) + (0.0000023 x
+			square of the sum of triceps, thigh and suprailiac skinfolds) - (0.0001392 x age)
+			<br /><br />(reference: Jackson, A.S. & Pollock, M.L. (1978), based on a sample aged 18-61)
+			<br /><br /><br />FFMI formula
+			<br />Total Body Fat = Weight * (body fat [%] / 100)
+			<br />Lean Weight = Weight * (1 - (body fat [%] / 100)
+			<br />FFMI = (Lean Weight / 2.2) / ((Feet * 12.0 + Inches) * 0.0254)2
+			<br />Adjusted FFMI = FFMI + ( 6.3 * (1.8 - (Feet * 12.0 + Inches) * 0.0254))
+			<br /><br /><a href="https://gitlab.com/Reidolph/KCalc"
+				target="_blank">https://gitlab.com/Reidolph/KCalc</a>
 		</div>
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script>
 		//31.4 calories per lb of fat per day
-		$("img.info").click(function() {
+		$("img.info").click(function () {
 			$('#' + $(this).attr("id") + "Container").toggle();
-			$('#' + $(this).attr("id") + "Container").css("display") == "none" ? $(this).attr("src", "help.png") : $(this).attr("src", "x.png");
+			$('#' + $(this).attr("id") + "Container").css("display") == "none" ? $(this).attr("src", "help.png") : $(
+				this).attr("src", "x.png");
 		});
 
-		$("button").click(function() {
+		function showBFC() {
+			if ($(".measure:checked").val() == "caliper") {
+				$('.tape').css("display", "none");
+				$('#sex').css("display", "table-row");
+				if ($(".sex:checked").val() == "male") {
+					$('.female').css("display", "none");
+					$('.calcBFP').css("display", "table");
+					$('.male.caliper').css("display", "table-row");
+				}
+				if ($(".sex:checked").val() == "female") {
+					$('.male').css("display", "none");
+					$('.calcBFP').css("display", "table");
+					$('.female.caliper').css("display", "table-row");
+				}
+			}
+			if ($(".measure:checked").val() == "tape") {
+				$('.caliper').css("display", "none");
+				$('#sex').css("display", "table-row");
+				if ($(".sex:checked").val() == "male") {
+					$('.female').css("display", "none");
+					$('.calcBFP').css("display", "table");
+					$('.male.tape').css("display", "table-row");
+				}
+				if ($(".sex:checked").val() == "female") {
+					$('.male').css("display", "none");
+					$('.calcBFP').css("display", "table");
+					$('.female.tape').css("display", "table-row");
+				}
+			}
+		}
+
+		$(".sex, .measure").click(showBFC);
+
+		$("#ffmiButton").click(function () {
+			$('#ffmiTable').toggle();
+		});
+
+		$("button").click(function () {
 			if (!$(this).hasClass("down")) {
 				$("button." + $(this).attr("class")).removeClass("down");
 				setParameter($(this).attr("class"), $(this).attr("id"));
@@ -169,8 +351,11 @@
 			}
 		});
 
-		$("input").on("keyup change click", function() {
-			setParameter($(this).attr("id"), $("#" + $(this).attr("id")).val());
+		$("input").on("keyup change click", function () {
+			if ($(this).prop('type') == 'radio')
+				setParameter($(this).attr("id"), $(this).val());
+			else
+				setParameter($(this).attr("id"), $("#" + $(this).attr("id")).val());
 			calc();
 		});
 
@@ -196,6 +381,55 @@
 			$("#protein").text(Math.round(protein));
 			$("#fat").text(Math.round(fat));
 			$("#carb").text(Math.round(carb));
+
+			var age = parseFloat($("#age").val());
+
+			if ($(".measure:checked").val() == "caliper") {
+				if ($(".sex:checked").val() == "male") {
+					var chest = parseFloat($("#chest").val());
+					var abdomen = parseFloat($("#abdomen").val());
+					var thigh = parseFloat($("#thigh").val());
+					var bodyDensity = 1.10938 - (0.0008267 * (chest + abdomen + thigh)) + (
+						0.0000016 * ((chest + abdomen + thigh) ** 2)) - (0.0002574 * age);
+					var bodyFat = 495 / bodyDensity - 450;
+					isNaN(bodyFat) ?  $('#calcBFP').text("") : $('#calcBFP').text(bodyFat.toFixed(1));
+				}
+
+				if ($(".sex:checked").val() == "female") {
+					var tricep = parseFloat($("#tricep").val());
+					var suprailiac = parseFloat($("#suprailiac").val());
+					var thigh = parseFloat($("#thigh").val());
+					var bodyDensity = 1.0994921 - (0.0009929 * (tricep + suprailiac + thigh)) + (
+						0.0000023 * ((tricep + suprailiac + thigh) ** 2)) - (0.0001392 * age);
+					var bodyFat = 495 / bodyDensity - 450;
+					isNaN(bodyFat) ?  $('#calcBFP').text("") : $('#calcBFP').text(bodyFat.toFixed(1));
+				}
+			}
+			if ($(".measure:checked").val() == "tape") {
+				if ($(".sex:checked").val() == "male") {
+					var height = parseFloat($("#height").val());
+					var neck = parseFloat($("#neck").val());
+					var waist = parseFloat($("#waist").val());
+					var bodyFat = 86.01 * Math.log10(waist - neck) - 70.041 * Math.log10(height) + 36.76;
+					isNaN(bodyFat) ?  $('#calcBFP').text("") : $('#calcBFP').text(bodyFat.toFixed(1));
+				}
+
+				if ($(".sex:checked").val() == "female") {
+					var height = parseFloat($("#height").val());
+					var neck = parseFloat($("#neck").val());
+					var waist = parseFloat($("#waist").val());
+					var hips = parseFloat($("#hips").val());
+					var bodyFat = 163.205 * Math.log10(waist + hips - neck) - 97.684 * Math.log10(height) - 78.387;
+					isNaN(bodyFat) ?  $('#calcBFP').text("") : $('#calcBFP').text(bodyFat.toFixed(1));
+				}
+			}
+
+			var foot = parseFloat($('#foot').val());
+			var inch = parseFloat($('#inch').val());
+			var ffmi = (lbm / 2.2) / ((foot * 12 + inch) * .0254) ** 2;
+			var nffmi = ffmi + (6.3 * (1.8 - (foot * 12 + inch) * .0254));
+			$('#ffmi').text(ffmi.toFixed(2));
+			$('#nffmi').text(nffmi.toFixed(2));
 		};
 
 		if (getParameter("weight")) $("#weight").val(getParameter("weight"));
@@ -205,6 +439,16 @@
 		if (getParameter("prolbm")) $("#prolbm").val(getParameter("prolbm"));
 		if (getParameter("fattbw")) $("#fattbw").val(getParameter("fattbw"));
 		if (getParameter("fatlbm")) $("#fatlbm").val(getParameter("fatlbm"));
+		if (getParameter("age")) $("#age").val(getParameter("age"));
+		if (getParameter("sex") == "female")
+			$("#sex[value=female").attr("checked", true);
+		else
+			$("#sex[value=male").attr("checked", true);
+		if (getParameter("chest")) $("#chest").val(getParameter("chest"));
+		if (getParameter("abdomen")) $("#abdomen").val(getParameter("abdomen"));
+		if (getParameter("tricep")) $("#tricep").val(getParameter("tricep"));
+		if (getParameter("suprailiac")) $("#suprailiac").val(getParameter("suprailiac"));
+		if (getParameter("thigh")) $("#thigh").val(getParameter("thigh"));
 		if (!$("button.goal").hasClass("down")) $("#maintain").addClass("down");
 		if (!$("button.act").hasClass("down")) $("#2").addClass("down");
 
