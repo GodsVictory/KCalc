@@ -65,8 +65,8 @@ var Qurl;
   }
 
   function setSearchString(string) {
-    if (history.pushState) {
-      history.pushState({}, document.title, string);
+    if (history.replaceState) {
+      history.replaceState({}, document.title, string);
     }
   }
 

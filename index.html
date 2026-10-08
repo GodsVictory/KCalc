@@ -5,7 +5,6 @@
 	<title>KCalc</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" type="image/png" href="favicon.png">
-	<script src="qurl.js"></script>
 </head>
 <style>
 	@font-face {
@@ -76,10 +75,18 @@
 	.female {
 		display: none;
 	}
+
+	*, *::before, *::after {
+		box-sizing: border-box;
+	}
+
+	img.info {
+		cursor: pointer;
+	}
 </style>
 
 <body style="background-image:url('stardust.png');">
-	<div style="display:inline-block; background:white; padding:25px; width:295px;">
+	<div style="display:inline-block; background:white; padding:25px; width:295px; max-width:100%;">
 		<table>
 			<tr>
 				<td style="text-align:left;">Weight [lb]:</td>
@@ -95,7 +102,7 @@
 			</tr>
 		</table>
 		<div id="helpFatContainer" style="display:none; width:100%;">
-			<img id="bf" src="bf.jpg" width="100%" />
+			<img id="bfImg" src="bf.jpg" width="100%" loading="lazy" alt="Body Fat Visual Guide" />
 			<table>
 				<tr>
 					<td style="text-align:left;">Method:</td>
@@ -103,11 +110,11 @@
 						<input type="radio" id="tape" class="measure" name="measure" value="tape">
 						<label for="tape">Tape</label>
 						&nbsp;&nbsp;&nbsp;
-						<input type="radio" id="measure" class="measure" name="measure" value="caliper">
-						<label for="measure">Fold</label>
+						<input type="radio" id="caliper" class="measure" name="measure" value="caliper">
+						<label for="caliper">Fold</label>
 					</td>
 				</tr>
-				<tr style="display: none;" id="sex">
+				<tr style="display: none;" id="sexRow">
 					<td style="text-align:left;">Sex:</td>
 					<td style="text-align:right;">
 						<input type="radio" id="male" class="sex" name="sex" value="male">
@@ -130,49 +137,49 @@
 					</td>
 				</tr>
 				<tr class="male caliper">
-					<td style="text-align:left;">Chest:</td>
+					<td style="text-align:left;">Chest [mm]:</td>
 					<td style="text-align:right;">
 						<input id="chest" type="number" min="0" max="100" value="12" style="width:60px">
 					</td>
 				</tr>
 				<tr class="male caliper">
-					<td style="text-align:left;">Abdomen:</td>
+					<td style="text-align:left;">Abdomen [mm]:</td>
 					<td style="text-align:right;">
 						<input id="abdomen" type="number" min="0" max="100" value="20" style="width:60px">
 					</td>
 				</tr>
 				<tr class="female caliper">
-					<td style="text-align:left;">Tricep:</td>
+					<td style="text-align:left;">Tricep [mm]:</td>
 					<td style="text-align:right;">
 						<input id="tricep" type="number" min="0" max="100" value="12" style="width:60px">
 					</td>
 				</tr>
 				<tr class="female caliper">
-					<td style="text-align:left;">Suprailiac:</td>
+					<td style="text-align:left;">Suprailiac [mm]:</td>
 					<td style="text-align:right;">
 						<input id="suprailiac" type="number" min="0" max="100" value="20" style="width:60px">
 					</td>
 				</tr>
 				<tr class="male female caliper">
-					<td style="text-align:left;">Thigh:</td>
+					<td style="text-align:left;">Thigh [mm]:</td>
 					<td style="text-align:right;">
 						<input id="thigh" type="number" min="0" max="100" value="12" style="width:60px">
 					</td>
 				</tr>
 				<tr class="male female tape">
-					<td style="text-align:left;">Neck:</td>
+					<td style="text-align:left;">Neck [in]:</td>
 					<td style="text-align:right;">
 						<input id="neck" type="number" min="0" max="100" value="15" style="width:60px" step="0.5">
 					</td>
 				</tr>
 				<tr class="male female tape">
-					<td style="text-align:left;">Waist:</td>
+					<td style="text-align:left;">Waist [in]:</td>
 					<td style="text-align:right;">
 						<input id="waist" type="number" min="0" max="100" value="34" style="width:60px" step="0.5">
 					</td>
 				</tr>
 				<tr class="female tape">
-					<td style="text-align:left;">Hips:</td>
+					<td style="text-align:left;">Hips [in]:</td>
 					<td style="text-align:right;">
 						<input id="hips" type="number" min="0" max="100" value="34" style="width:60px" step="0.5">
 					</td>
@@ -194,19 +201,19 @@
 		</div>
 		<table style="padding-top:10px;">
 			<tr>
-				<td style="width:20%;"><button id="1" class="act">1</button></td>
-				<td style="width:20%;"><button id="2" class="act">2</button></td>
-				<td style="width:20%;"><button id="3" class="act">3</button></td>
-				<td style="width:20%;"><button id="4" class="act">4</button></td>
-				<td style="width:20%;"><button id="5" class="act">5</button></td>
+				<td style="width:20%;"><button id="1" class="act" title="1 • Sedentary (little to no exercise)">1</button></td>
+				<td style="width:20%;"><button id="2" class="act" title="2 • Lightly Active (light exercise 1-3 days/wk)">2</button></td>
+				<td style="width:20%;"><button id="3" class="act" title="3 • Moderately Active (moderate exercise 3-5 days/wk)">3</button></td>
+				<td style="width:20%;"><button id="4" class="act" title="4 • Highly Active (hard exercise 6-7 days/wk)">4</button></td>
+				<td style="width:20%;"><button id="5" class="act" title="5 • Always Active (very hard exercise / physical job)">5</button></td>
 			</tr>
 		</table>
 		<div style="text-align:left; padding-top:10px;">Goal:</div>
 		<table style="padding-top:10px;">
 			<tr>
-				<td style="width:33%;"><button id="cut" class="goal">Cut</button></td>
-				<td style="width:33%;"><button id="maintain" class="goal">Maintain</button></td>
-				<td style="width:33%;"><button id="bulk" class="goal">Bulk</button></td>
+				<td style="width:33%;"><button id="cut" class="goal" title="Cut: 20% deficit for fat loss">Cut</button></td>
+				<td style="width:33%;"><button id="maintain" class="goal" title="Maintain: calories match energy expenditure">Maintain</button></td>
+				<td style="width:33%;"><button id="bulk" class="goal" title="Bulk: surplus tailored to your maximal muscle growth rate">Bulk</button></td>
 			</tr>
 		</table>
 		<div style="text-align:left; float:left; padding-top:20px;">Results <img id="settings" class="info"
@@ -248,9 +255,13 @@
 				<td style="text-align:left;">Fat</td>
 				<td style="text-align:right;" id="fat"></td>
 			</tr>
+			<tr id="maxMuscleRow" style="display:none; font-size:14px; color:#555;">
+				<td style="text-align:left;">Max Muscle Gain:</td>
+				<td style="text-align:right;" id="maxMuscle"></td>
+			</tr>
 		</table>
 		<br />
-		<div style="float:left;background-color:DimGrey;Color:white;padding:0px 7px 0px 7px;" id="ffmiButton">FFMI</div>
+		<div style="float:left;background-color:DimGrey;Color:white;padding:0px 7px 0px 7px;cursor:pointer;" id="ffmiButton">FFMI</div>
 		<table id="ffmiTable" style="display: none;">
 			<tr>
 				<td style="text-align:left;">Height [ft/in]:</td>
@@ -279,7 +290,7 @@
 			<br /><br /> By default, you are calculated 1g of protein per lb of LBM and .4g of fat per lb of TBW if you
 			are below 20% BF, or .4g of fat per lb of LBM if you are above 20% BF. Carbs are then used to fill the rest
 			of your TDEE.
-			<br /><br /> Cut and Bulk are calculated by adding or subtracting 20% from your TDEE.
+			<br /><br /> Cut is calculated by subtracting 20% from your TDEE. Bulk dynamically calculates your maximal natural muscle growth potential and adds the optimal metabolic surplus based on your Normalized FFMI, weight, sex, and age.
 			<br /><br /><br /> 3-Site Skinfold Equation Male
 			<br />Body Density = 1.10938 - (0.0008267 x sum of chest, abdomen and thigh skinfolds in mm ) + (0.0000016 x
 			square of the sum of chest, abdomen and thigh) - (0.0002574 x age)
@@ -290,176 +301,394 @@
 			<br /><br /><br />FFMI formula
 			<br />Total Body Fat = Weight * (body fat [%] / 100)
 			<br />Lean Weight = Weight * (1 - (body fat [%] / 100)
-			<br />FFMI = (Lean Weight / 2.2) / ((Feet * 12.0 + Inches) * 0.0254)2
+			<br />FFMI = (Lean Weight / 2.20462) / ((Feet * 12.0 + Inches) * 0.0254)2
 			<br />Adjusted FFMI = FFMI + ( 6.3 * (1.8 - (Feet * 12.0 + Inches) * 0.0254))
 			<br /><br /><a href="https://gitlab.com/Reidolph/KCalc"
 				target="_blank">https://gitlab.com/Reidolph/KCalc</a>
 		</div>
 	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script>
-		//31.4 calories per lb of fat per day
-		$("img.info").click(function () {
-			$('#' + $(this).attr("id") + "Container").toggle();
-			$('#' + $(this).attr("id") + "Container").css("display") == "none" ? $(this).attr("src", "help.png") : $(
-				this).attr("src", "x.png");
-		});
-
-		function showBFC() {
-			if ($(".measure:checked").val() == "caliper") {
-				$('.tape').css("display", "none");
-				$('#sex').css("display", "table-row");
-				if ($(".sex:checked").val() == "male") {
-					$('.female').css("display", "none");
-					$('.calcBFP').css("display", "table");
-					$('.male.caliper').css("display", "table-row");
-				}
-				if ($(".sex:checked").val() == "female") {
-					$('.male').css("display", "none");
-					$('.calcBFP').css("display", "table");
-					$('.female.caliper').css("display", "table-row");
-				}
-			}
-			if ($(".measure:checked").val() == "tape") {
-				$('.caliper').css("display", "none");
-				$('#sex').css("display", "table-row");
-				if ($(".sex:checked").val() == "male") {
-					$('.female').css("display", "none");
-					$('.calcBFP').css("display", "table");
-					$('.male.tape').css("display", "table-row");
-				}
-				if ($(".sex:checked").val() == "female") {
-					$('.male').css("display", "none");
-					$('.calcBFP').css("display", "table");
-					$('.female.tape').css("display", "table-row");
-				}
-			}
+		// --- State and URL Management ---
+		let paramDebounceTimer = null;
+		function setParameter(name, value) {
+			if (paramDebounceTimer) clearTimeout(paramDebounceTimer);
+			paramDebounceTimer = setTimeout(() => {
+				try {
+					const url = new URL(window.location.href);
+					if (value === false || value === undefined || value === null || value === '') {
+						url.searchParams.delete(name);
+					} else {
+						url.searchParams.set(name, value);
+					}
+					window.history.replaceState({}, '', url.toString());
+				} catch (e) {}
+			}, 250);
 		}
-
-		$(".sex, .measure").click(showBFC);
-
-		$("#ffmiButton").click(function () {
-			$('#ffmiTable').toggle();
-		});
-
-		$("button").click(function () {
-			if (!$(this).hasClass("down")) {
-				$("button." + $(this).attr("class")).removeClass("down");
-				setParameter($(this).attr("class"), $(this).attr("id"));
-				$(this).addClass("down");
-				calc();
-			}
-		});
-
-		$("input").on("keyup change click", function () {
-			if ($(this).prop('type') == 'radio')
-				setParameter($(this).attr("id"), $(this).val());
-			else
-				setParameter($(this).attr("id"), $("#" + $(this).attr("id")).val());
-			calc();
-		});
-
-		function calc() {
-			var actArray = [1.2, 1.2, 1.375, 1.55, 1.725, 1.9];
-			var actLevel = actArray[$("button.act.down").attr("id")];
-			var weight = $("#weight").val();
-			var bf = $("#bf").val();
-			var prolbm = $("#prolbm").val();
-			var fattbw = $("#fattbw").val();
-			var fatlbm = $("#fatlbm").val();
-			var lbm = weight - weight * (bf * .01);
-
-			cal = (370 + (9.8 * lbm)) * actLevel;
-			if ($("#cut").hasClass("down")) cal -= cal * .2;
-			if ($("#bulk").hasClass("down")) cal += cal * .2;
-
-			var protein = lbm * prolbm;
-			var fat = bf > 20 ? lbm * fatlbm : weight * fattbw;
-			var carb = protein * 4 + fat * 9 < cal ? (cal - (protein * 4) - (fat * 9)) / 4 : 0;
-
-			$("#cal").text(Math.round(protein * 4 + fat * 9 + carb * 4));
-			$("#protein").text(Math.round(protein));
-			$("#fat").text(Math.round(fat));
-			$("#carb").text(Math.round(carb));
-
-			var age = parseFloat($("#age").val());
-
-			if ($(".measure:checked").val() == "caliper") {
-				if ($(".sex:checked").val() == "male") {
-					var chest = parseFloat($("#chest").val());
-					var abdomen = parseFloat($("#abdomen").val());
-					var thigh = parseFloat($("#thigh").val());
-					var bodyDensity = 1.10938 - (0.0008267 * (chest + abdomen + thigh)) + (
-						0.0000016 * ((chest + abdomen + thigh) ** 2)) - (0.0002574 * age);
-					var bodyFat = 495 / bodyDensity - 450;
-					isNaN(bodyFat) ?  $('#calcBFP').text("") : $('#calcBFP').text(bodyFat.toFixed(1));
-				}
-
-				if ($(".sex:checked").val() == "female") {
-					var tricep = parseFloat($("#tricep").val());
-					var suprailiac = parseFloat($("#suprailiac").val());
-					var thigh = parseFloat($("#thigh").val());
-					var bodyDensity = 1.0994921 - (0.0009929 * (tricep + suprailiac + thigh)) + (
-						0.0000023 * ((tricep + suprailiac + thigh) ** 2)) - (0.0001392 * age);
-					var bodyFat = 495 / bodyDensity - 450;
-					isNaN(bodyFat) ?  $('#calcBFP').text("") : $('#calcBFP').text(bodyFat.toFixed(1));
-				}
-			}
-			if ($(".measure:checked").val() == "tape") {
-				if ($(".sex:checked").val() == "male") {
-					var height = parseFloat($("#height").val());
-					var neck = parseFloat($("#neck").val());
-					var waist = parseFloat($("#waist").val());
-					var bodyFat = 86.01 * Math.log10(waist - neck) - 70.041 * Math.log10(height) + 36.76;
-					isNaN(bodyFat) ?  $('#calcBFP').text("") : $('#calcBFP').text(bodyFat.toFixed(1));
-				}
-
-				if ($(".sex:checked").val() == "female") {
-					var height = parseFloat($("#height").val());
-					var neck = parseFloat($("#neck").val());
-					var waist = parseFloat($("#waist").val());
-					var hips = parseFloat($("#hips").val());
-					var bodyFat = 163.205 * Math.log10(waist + hips - neck) - 97.684 * Math.log10(height) - 78.387;
-					isNaN(bodyFat) ?  $('#calcBFP').text("") : $('#calcBFP').text(bodyFat.toFixed(1));
-				}
-			}
-
-			var foot = parseFloat($('#foot').val());
-			var inch = parseFloat($('#inch').val());
-			var ffmi = (lbm / 2.2) / ((foot * 12 + inch) * .0254) ** 2;
-			var nffmi = ffmi + (6.3 * (1.8 - (foot * 12 + inch) * .0254));
-			$('#ffmi').text(ffmi.toFixed(2));
-			$('#nffmi').text(nffmi.toFixed(2));
-		};
-
-		if (getParameter("weight")) $("#weight").val(getParameter("weight"));
-		if (getParameter("bf")) $("#bf").val(getParameter("bf"));
-		if (getParameter("act")) $("#" + getParameter("act")).addClass("down");
-		if (getParameter("goal")) $("#" + getParameter("goal")).addClass("down");
-		if (getParameter("prolbm")) $("#prolbm").val(getParameter("prolbm"));
-		if (getParameter("fattbw")) $("#fattbw").val(getParameter("fattbw"));
-		if (getParameter("fatlbm")) $("#fatlbm").val(getParameter("fatlbm"));
-		if (getParameter("age")) $("#age").val(getParameter("age"));
-		if (getParameter("sex") == "female")
-			$("#sex[value=female").attr("checked", true);
-		else
-			$("#sex[value=male").attr("checked", true);
-		if (getParameter("chest")) $("#chest").val(getParameter("chest"));
-		if (getParameter("abdomen")) $("#abdomen").val(getParameter("abdomen"));
-		if (getParameter("tricep")) $("#tricep").val(getParameter("tricep"));
-		if (getParameter("suprailiac")) $("#suprailiac").val(getParameter("suprailiac"));
-		if (getParameter("thigh")) $("#thigh").val(getParameter("thigh"));
-		if (!$("button.goal").hasClass("down")) $("#maintain").addClass("down");
-		if (!$("button.act").hasClass("down")) $("#2").addClass("down");
 
 		function getParameter(name) {
-			return Qurl.create().query(name);
+			try {
+				const urlParams = new URLSearchParams(window.location.search);
+				return urlParams.get(name);
+			} catch (e) {
+				return null;
+			}
 		}
 
-		function setParameter(name, value) {
-			Qurl.create().query(name, value);
+		// --- Height Synchronization (Minimizes duplicate entry) ---
+		function syncHeightFromInches(val) {
+			const h = parseFloat(val);
+			if (!isNaN(h) && h > 0) {
+				const ft = Math.floor(h / 12);
+				const inch = Math.round(h % 12);
+				const footEl = document.getElementById('foot');
+				const inchEl = document.getElementById('inch');
+				if (footEl) footEl.value = ft;
+				if (inchEl) inchEl.value = inch;
+				setParameter('foot', ft);
+				setParameter('inch', inch);
+			}
 		}
-		calc();
+
+		function syncHeightFromFtIn() {
+			const ft = parseFloat(document.getElementById('foot')?.value) || 0;
+			const inch = parseFloat(document.getElementById('inch')?.value) || 0;
+			const totalInches = ft * 12 + inch;
+			if (totalInches > 0) {
+				const heightEl = document.getElementById('height');
+				if (heightEl) heightEl.value = totalInches;
+				setParameter('height', totalInches);
+			}
+		}
+
+		// --- Toggle Measurement Rows ---
+		function showBFC() {
+			const measureRadio = document.querySelector('input.measure:checked');
+			const measure = measureRadio ? measureRadio.value : null;
+			const sexRow = document.getElementById('sexRow');
+			const calcBFPTable = document.querySelector('.calcBFP');
+
+			// Hide all measurement rows first
+			document.querySelectorAll('.tape, .caliper').forEach(el => el.style.display = 'none');
+
+			if (!measure) {
+				if (sexRow) sexRow.style.display = 'none';
+				if (calcBFPTable) calcBFPTable.style.display = 'none';
+				return;
+			}
+
+			if (sexRow) sexRow.style.display = 'table-row';
+
+			// Minimize button presses: default to Male if not selected
+			let sexRadio = document.querySelector('input.sex:checked');
+			if (!sexRadio) {
+				const maleRadio = document.getElementById('male');
+				if (maleRadio) {
+					maleRadio.checked = true;
+					setParameter('sex', 'male');
+					sexRadio = maleRadio;
+				}
+			}
+
+			if (calcBFPTable) calcBFPTable.style.display = 'table';
+			const currentSex = sexRadio ? sexRadio.value : 'male';
+
+			if (measure === 'caliper') {
+				if (currentSex === 'male') {
+					document.querySelectorAll('.male.caliper').forEach(el => el.style.display = 'table-row');
+				} else if (currentSex === 'female') {
+					document.querySelectorAll('.female.caliper').forEach(el => el.style.display = 'table-row');
+				}
+			} else if (measure === 'tape') {
+				if (currentSex === 'male') {
+					document.querySelectorAll('.male.tape').forEach(el => el.style.display = 'table-row');
+				} else if (currentSex === 'female') {
+					document.querySelectorAll('.female.tape').forEach(el => el.style.display = 'table-row');
+				}
+			}
+		}
+
+		// --- Dynamic Maximal Muscle Growth Model ---
+		function calcMaxMuscleGrowth(weight, nffmiVal, isMale, age) {
+			const ceiling = isMale ? 25.0 : 21.5;
+			const baseMin = isMale ? 16.0 : 13.5;
+
+			const effectiveNffmi = nffmiVal > 0 ? nffmiVal : (isMale ? 19.0 : 16.0);
+			const clampedFfmi = Math.max(baseMin, Math.min(ceiling, effectiveNffmi));
+			const headroom = (ceiling - clampedFfmi) / (ceiling - baseMin); // 1.0 (untrained) to 0.0 (genetic limit)
+
+			// Maximal natural muscle growth in lbs/month based on proximity to ceiling:
+			// Male: ~0.25 lb/mo (elite) to ~1.9 lb/mo (untrained)
+			// Female: ~0.15 lb/mo (elite) to ~0.95 lb/mo (untrained)
+			let maxMuscleMo = isMale
+				? (0.25 + 1.65 * Math.pow(headroom, 1.2))
+				: (0.15 + 0.80 * Math.pow(headroom, 1.2));
+
+			// Metabolic cost of muscle synthesis (~150 kcal/lb of muscle potential) + thermogenic buffer
+			let surplusKcal = isMale
+				? (80 + maxMuscleMo * 150)
+				: (60 + maxMuscleMo * 160);
+
+			if (age > 40) {
+				const ageFactor = Math.max(0.65, 1.0 - (age - 40) * 0.01);
+				maxMuscleMo *= ageFactor;
+				surplusKcal *= ageFactor;
+			}
+
+			return {
+				muscleLbsPerMonth: maxMuscleMo,
+				surplusKcal: Math.round(surplusKcal)
+			};
+		}
+
+		// --- Main Calculation Engine ---
+		function calc(isManualBf = false) {
+			const actMap = { '1': 1.2, '2': 1.375, '3': 1.55, '4': 1.725, '5': 1.9 };
+			const activeActBtn = document.querySelector('button.act.down');
+			const actLevel = activeActBtn && actMap[activeActBtn.id] ? actMap[activeActBtn.id] : 1.375;
+
+			// Body fat percentage estimation
+			const measureChecked = document.querySelector('input.measure:checked');
+			const sexChecked = document.querySelector('input.sex:checked');
+			const calcBFPDisplay = document.getElementById('calcBFP');
+			let calculatedBf = null;
+
+			if (measureChecked && sexChecked) {
+				const measure = measureChecked.value;
+				const sex = sexChecked.value;
+				const age = parseFloat(document.getElementById('age')?.value) || 0;
+
+				if (measure === 'caliper') {
+					if (sex === 'male') {
+						const chest = parseFloat(document.getElementById('chest')?.value) || 0;
+						const abdomen = parseFloat(document.getElementById('abdomen')?.value) || 0;
+						const thigh = parseFloat(document.getElementById('thigh')?.value) || 0;
+						const sum = chest + abdomen + thigh;
+						if (sum > 0) {
+							const density = 1.10938 - (0.0008267 * sum) + (0.0000016 * (sum ** 2)) - (0.0002574 * age);
+							if (density > 0) {
+								const bfEst = (495 / density) - 450;
+								if (!isNaN(bfEst) && bfEst >= 2 && bfEst <= 70) calculatedBf = bfEst;
+							}
+						}
+					} else if (sex === 'female') {
+						const tricep = parseFloat(document.getElementById('tricep')?.value) || 0;
+						const suprailiac = parseFloat(document.getElementById('suprailiac')?.value) || 0;
+						const thigh = parseFloat(document.getElementById('thigh')?.value) || 0;
+						const sum = tricep + suprailiac + thigh;
+						if (sum > 0) {
+							const density = 1.0994921 - (0.0009929 * sum) + (0.0000023 * (sum ** 2)) - (0.0001392 * age);
+							if (density > 0) {
+								const bfEst = (495 / density) - 450;
+								if (!isNaN(bfEst) && bfEst >= 2 && bfEst <= 70) calculatedBf = bfEst;
+							}
+						}
+					}
+				} else if (measure === 'tape') {
+					const height = parseFloat(document.getElementById('height')?.value) || 0;
+					const neck = parseFloat(document.getElementById('neck')?.value) || 0;
+					const waist = parseFloat(document.getElementById('waist')?.value) || 0;
+
+					if (sex === 'male') {
+						const diff = waist - neck;
+						if (diff > 0 && height > 0) {
+							const bfEst = 86.01 * Math.log10(diff) - 70.041 * Math.log10(height) + 36.76;
+							if (!isNaN(bfEst) && bfEst >= 2 && bfEst <= 70) calculatedBf = bfEst;
+						}
+					} else if (sex === 'female') {
+						const hips = parseFloat(document.getElementById('hips')?.value) || 0;
+						const sum = waist + hips - neck;
+						if (sum > 0 && height > 0) {
+							const bfEst = 163.205 * Math.log10(sum) - 97.684 * Math.log10(height) - 78.387;
+							if (!isNaN(bfEst) && bfEst >= 2 && bfEst <= 70) calculatedBf = bfEst;
+						}
+					}
+				}
+			}
+
+			if (calcBFPDisplay) {
+				calcBFPDisplay.textContent = calculatedBf !== null ? calculatedBf.toFixed(1) + '%' : '';
+			}
+
+			// Automatically update the main Body Fat Percent input if calculated, minimizing manual inputs
+			const bfInput = document.getElementById('bf');
+			if (calculatedBf !== null && !isManualBf && bfInput) {
+				bfInput.value = calculatedBf.toFixed(1);
+				setParameter('bf', calculatedBf.toFixed(1));
+			}
+
+			// Core Metrics
+			const weight = parseFloat(document.getElementById('weight')?.value) || 0;
+			const bf = parseFloat(bfInput?.value) || 0;
+			const prolbm = parseFloat(document.getElementById('prolbm')?.value) || 1;
+			const fattbw = parseFloat(document.getElementById('fattbw')?.value) || 0.4;
+			const fatlbm = parseFloat(document.getElementById('fatlbm')?.value) || 0.4;
+
+			const lbm = Math.max(0, weight * (1 - (bf * 0.01)));
+
+			// FFMI and Normalized FFMI
+			const foot = parseFloat(document.getElementById('foot')?.value) || 0;
+			const inch = parseFloat(document.getElementById('inch')?.value) || 0;
+			const totalHeightM = (foot * 12 + inch) * 0.0254;
+
+			let ffmi = 0;
+			let nffmi = 0;
+			if (totalHeightM > 0 && lbm > 0) {
+				const lbmKg = lbm / 2.20462;
+				ffmi = lbmKg / (totalHeightM ** 2);
+				nffmi = ffmi + (6.3 * (1.8 - totalHeightM));
+				document.getElementById('ffmi').textContent = ffmi.toFixed(2);
+				document.getElementById('nffmi').textContent = nffmi.toFixed(2);
+			} else {
+				document.getElementById('ffmi').textContent = '--';
+				document.getElementById('nffmi').textContent = '--';
+			}
+
+			// Maximal Muscle Growth Calculation
+			const isMale = (document.querySelector('input.sex:checked')?.value || getParameter('sex') || 'male') !== 'female';
+			const age = parseFloat(document.getElementById('age')?.value) || 27;
+			const musclePotential = calcMaxMuscleGrowth(weight, nffmi, isMale, age);
+
+			// Calories and Goal Modifiers
+			let cal = (370 + (9.8 * lbm)) * actLevel;
+			const isCut = document.getElementById('cut')?.classList.contains('down');
+			const isBulk = document.getElementById('bulk')?.classList.contains('down');
+
+			if (isCut) {
+				cal -= cal * 0.2;
+			} else if (isBulk) {
+				cal += musclePotential.surplusKcal;
+			}
+
+			const protein = lbm * prolbm;
+			const fat = bf > 20 ? lbm * fatlbm : weight * fattbw;
+			const carb = (protein * 4 + fat * 9 < cal) ? (cal - (protein * 4) - (fat * 9)) / 4 : 0;
+
+			const finalCal = Math.round(protein * 4 + fat * 9 + carb * 4);
+			document.getElementById('cal').textContent = weight > 0 ? finalCal : 0;
+			document.getElementById('protein').textContent = weight > 0 ? Math.round(protein) : 0;
+			document.getElementById('fat').textContent = weight > 0 ? Math.round(fat) : 0;
+			document.getElementById('carb').textContent = weight > 0 ? Math.round(carb) : 0;
+
+			// Display Max Muscle Potential when Bulk is active
+			const maxMuscleRow = document.getElementById('maxMuscleRow');
+			const maxMuscleVal = document.getElementById('maxMuscle');
+			if (maxMuscleRow && maxMuscleVal) {
+				if (isBulk && weight > 0) {
+					maxMuscleRow.style.display = 'table-row';
+					maxMuscleVal.textContent = `~${musclePotential.muscleLbsPerMonth.toFixed(2)} lb/mo (+${musclePotential.surplusKcal} kcal)`;
+				} else {
+					maxMuscleRow.style.display = 'none';
+				}
+			}
+		}
+
+		// --- Event Listeners ---
+		function handleInputChange(e) {
+			const target = e.target;
+			if (target.type === 'radio') {
+				setParameter(target.name, target.value);
+				if (target.classList.contains('measure') || target.classList.contains('sex')) {
+					showBFC();
+				}
+			} else {
+				setParameter(target.id, target.value);
+				if (target.id === 'height') {
+					syncHeightFromInches(target.value);
+				} else if (target.id === 'foot' || target.id === 'inch') {
+					syncHeightFromFtIn();
+				}
+			}
+			calc(target.id === 'bf');
+		}
+
+		document.querySelectorAll('input').forEach(input => {
+			input.addEventListener('input', handleInputChange);
+			if (input.type === 'radio') {
+				input.addEventListener('change', handleInputChange);
+			}
+		});
+
+		document.querySelectorAll('img.info').forEach(img => {
+			img.addEventListener('click', function () {
+				const container = document.getElementById(this.id + 'Container');
+				if (!container) return;
+				const isHidden = window.getComputedStyle(container).display === 'none';
+				container.style.display = isHidden ? (container.tagName === 'TABLE' ? 'table' : 'block') : 'none';
+				this.src = isHidden ? 'x.png' : 'help.png';
+			});
+		});
+
+		document.querySelectorAll('button.act, button.goal').forEach(btn => {
+			btn.addEventListener('click', function () {
+				if (!this.classList.contains('down')) {
+					const group = this.classList.contains('act') ? 'act' : 'goal';
+					document.querySelectorAll('button.' + group).forEach(b => b.classList.remove('down'));
+					this.classList.add('down');
+					setParameter(group, this.id);
+					calc(false);
+				}
+			});
+		});
+
+		const ffmiBtn = document.getElementById('ffmiButton');
+		const ffmiTable = document.getElementById('ffmiTable');
+		if (ffmiBtn && ffmiTable) {
+			ffmiBtn.addEventListener('click', function () {
+				const isHidden = window.getComputedStyle(ffmiTable).display === 'none';
+				ffmiTable.style.display = isHidden ? 'table' : 'none';
+			});
+		}
+
+		// --- Initialize and Restore from URL Parameters ---
+		const numInputs = [
+			'weight', 'bf', 'prolbm', 'fattbw', 'fatlbm',
+			'age', 'height', 'chest', 'abdomen', 'tricep',
+			'suprailiac', 'thigh', 'neck', 'waist', 'hips',
+			'foot', 'inch'
+		];
+		numInputs.forEach(id => {
+			const val = getParameter(id);
+			const el = document.getElementById(id);
+			if (val !== null && el) el.value = val;
+		});
+
+		const savedSex = getParameter('sex');
+		if (savedSex === 'female') {
+			const f = document.getElementById('female');
+			if (f) f.checked = true;
+		} else if (savedSex === 'male') {
+			const m = document.getElementById('male');
+			if (m) m.checked = true;
+		}
+
+		const savedMeasure = getParameter('measure');
+		if (savedMeasure === 'tape') {
+			const t = document.getElementById('tape');
+			if (t) t.checked = true;
+		} else if (savedMeasure === 'caliper') {
+			const c = document.getElementById('caliper');
+			if (c) c.checked = true;
+		}
+
+		const savedAct = getParameter('act');
+		if (savedAct && document.getElementById(savedAct)) {
+			document.getElementById(savedAct).classList.add('down');
+		} else {
+			document.getElementById('2')?.classList.add('down');
+		}
+
+		const savedGoal = getParameter('goal');
+		if (savedGoal && document.getElementById(savedGoal)) {
+			document.getElementById(savedGoal).classList.add('down');
+		} else {
+			document.getElementById('maintain')?.classList.add('down');
+		}
+
+		if (savedMeasure) {
+			showBFC();
+		}
+
+		calc(false);
 	</script>
 </body>
 
